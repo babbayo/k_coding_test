@@ -1,0 +1,37 @@
+### program 추가
+POST http://localhost:8080/programs
+Content-Type: application/json
+
+{
+  "number": 1,
+  "name": "test",
+  "theme": "test",
+  "region": "test",
+  "introduction": "introduction test",
+  "detailIntroduction": "hello \n test"
+}
+
+### prgram 조회
+GET http://localhost:8080/programs
+
+### prgram 들 조회
+GET http://localhost:8080/programs/1
+
+### program 수정
+PUT http://localhost:8080/programs
+Content-Type: application/json
+
+{
+  "id": 1,
+  "number": 1,
+  "name": "test-rename",
+  "theme": "test",
+  "region": "test",
+  "introduction": "introduction test",
+  "detailIntroduction": "hello \n test"
+}
+
+### h2 확인
+GET http://localhost:8080/h2-console
+
+###
