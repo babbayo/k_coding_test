@@ -8,9 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
-import javax.persistence.OneToOne;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,9 +33,7 @@ public class Program {
 
 	private String theme;
 
-	@OneToOne
-	@JoinColumn(name = "address_id")
-	private Address address;
+	private String address;
 
 	private String introduction;
 
@@ -46,5 +42,24 @@ public class Program {
 
 	public Program(String name) {
 		this.name = name;
+	}
+
+	//	테마 컬럼, 프로그램 소개 컬럼, 그리고 프로그램 상세 소개 컬럼을 모두 사용하시고 가중치를 계산하는 로직이 포함되어야 합니다.
+	public int getScoreFromKeyword(String keyword) {
+		return countKeywordFromTheme(keyword) +
+			countKeywordFromIntroduction(keyword) +
+			countKeywordFromDetailIntroduction(keyword);
+	}
+
+	int countKeywordFromTheme(String keyword) {
+		return theme.contains(keyword) ? 1 : 0;
+	}
+
+	int countKeywordFromIntroduction(String keyword) {
+		return introduction.contains(keyword) ? 1 : 0;
+	}
+
+	public int countKeywordFromDetailIntroduction(String keyword) {
+		return detailIntroduction.contains(keyword) ? 1 : 0;
 	}
 }

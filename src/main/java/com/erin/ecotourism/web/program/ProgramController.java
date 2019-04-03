@@ -2,7 +2,7 @@
  * Copyright 2019 Naver Corp. All rights Reserved.
  * Naver PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
-package com.erin.ecotourism.web;
+package com.erin.ecotourism.web.program;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,12 +24,12 @@ public class ProgramController {
 	private ProgramRepository programRepository;
 
 	@GetMapping("/{id}")
-	private Program getEmployeeById(@PathVariable Long id) {
+	private Program getById(@PathVariable Long id) {
 		return programRepository.findById(id).orElse(null);
 	}
 
 	@GetMapping
-	private Iterable<Program> getAllEmployees() {
+	private Iterable<Program> getAll() {
 		return programRepository.findAll();
 	}
 
@@ -39,7 +39,7 @@ public class ProgramController {
 	}
 
 	@PutMapping
-	private Program updateEmployee(@RequestBody Program program) {
+	private Program update(@RequestBody Program program) {
 		return programRepository.save(program);
 	}
 

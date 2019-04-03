@@ -6,15 +6,15 @@ Content-Type: application/json
   "number": 1,
   "name": "test",
   "theme": "test",
-  "region": "test",
+  "address": "address1 address2, address3",
   "introduction": "introduction test",
   "detailIntroduction": "hello \n test"
 }
 
-### prgram 조회
+### prgram 들 조회
 GET http://localhost:8080/programs
 
-### prgram 들 조회
+### prgram 조회
 GET http://localhost:8080/programs/1
 
 ### program 수정
@@ -26,12 +26,54 @@ Content-Type: application/json
   "number": 1,
   "name": "test-rename",
   "theme": "test",
-  "region": "test",
+  "address": "test",
   "introduction": "introduction test",
   "detailIntroduction": "hello \n test"
 }
 
 ### h2 확인
 GET http://localhost:8080/h2-console
+
+### region 으로 조회
+GET http://localhost:8080/search/summary
+Content-Type: application/json
+
+{
+  "region": "평창군"
+}
+
+### keyword 로 region 조회
+GET http://localhost:8080/search/counting/region
+Content-Type: application/json
+
+{
+  "keyword": "세계문화유산"
+}
+
+### keyword 로 program 조회
+GET http://localhost:8080/search/counting/program
+Content-Type: application/json
+
+{
+  "keyword": "문화"
+}
+
+### keyword +region 으로 program 조회
+GET http://localhost:8080/search/program
+Content-Type: application/json
+
+{
+  "region": "평창",
+  "keyword": "국립공원"
+}
+
+### keyword +region 으로 program 조회 2
+GET http://localhost:8080/search/program
+Content-Type: application/json
+
+{
+  "region": "남해",
+  "keyword": "생태체험"
+}
 
 ###
