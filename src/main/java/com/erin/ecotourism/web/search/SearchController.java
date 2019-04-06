@@ -100,7 +100,7 @@ public class SearchController {
 		return Optional.of(condition)
 			.flatMap(dto -> programRepository.findAllByAddressContaining(dto.getRegion())
 				.stream()
-				.max(Comparator.comparingInt(p -> p.getScoreFromKeyword(dto.getKeyword())))
+				.max(Comparator.comparingInt(p -> p.acquireScoreFromKeyword(dto.getKeyword())))
 				.map(p -> ProgramKeyOutput.builder().program(String.valueOf(p.getName())).build()))
 			.orElse(ProgramKeyOutput.EMPTY);
 	}

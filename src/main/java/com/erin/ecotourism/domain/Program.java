@@ -10,6 +10,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 
+import org.apache.commons.lang3.StringUtils;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -45,21 +47,21 @@ public class Program {
 	}
 
 	//	테마 컬럼, 프로그램 소개 컬럼, 그리고 프로그램 상세 소개 컬럼을 모두 사용하시고 가중치를 계산하는 로직이 포함되어야 합니다.
-	public int getScoreFromKeyword(String keyword) {
+	public int acquireScoreFromKeyword(String keyword) {
 		return countKeywordFromTheme(keyword) +
 			countKeywordFromIntroduction(keyword) +
 			countKeywordFromDetailIntroduction(keyword);
 	}
 
 	int countKeywordFromTheme(String keyword) {
-		return theme.contains(keyword) ? 1 : 0;
+		return StringUtils.countMatches(theme, keyword);
 	}
 
 	int countKeywordFromIntroduction(String keyword) {
-		return introduction.contains(keyword) ? 1 : 0;
+		return StringUtils.countMatches(introduction, keyword);
 	}
 
 	public int countKeywordFromDetailIntroduction(String keyword) {
-		return detailIntroduction.contains(keyword) ? 1 : 0;
+		return StringUtils.countMatches(detailIntroduction, keyword);
 	}
 }
