@@ -39,7 +39,8 @@ public class SearchController {
 		return Optional.of(condition)
 			.map(SearchDto::getRegion)
 			.map(region -> {
-				List<ProgramSummary> programs = programRepository.findAllByAddressContaining(region).stream()
+				List<ProgramSummary> programs = programRepository.findAllByAddressValueContaining(region)
+					.stream()
 					.map(ProgramSummary::create)
 					.collect(Collectors.toList());
 
@@ -98,7 +99,7 @@ public class SearchController {
 	@GetMapping("/program")
 	private ProgramKeyOutput getProgramByKeyword(@RequestBody SearchDto condition) {
 		return Optional.of(condition)
-			.flatMap(dto -> programRepository.findAllByAddressContaining(dto.getRegion())
+			.flatMap(dto -> programRepository.findAllByAddressValueContaining(dto.getRegion())
 				.stream()
 				.max(Comparator.comparingInt(p -> p.acquireScoreFromKeyword(dto.getKeyword())))
 				.map(p -> ProgramKeyOutput.builder().program(String.valueOf(p.getName())).build()))

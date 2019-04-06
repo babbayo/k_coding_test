@@ -4,6 +4,7 @@
  */
 package com.erin.ecotourism.domain;
 
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -11,6 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 
 import org.apache.commons.lang3.StringUtils;
+
+import com.fasterxml.jackson.annotation.JsonGetter;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,7 +38,7 @@ public class Program {
 
 	private String theme;
 
-	private String address;
+	private Address address;
 
 	private String introduction;
 
@@ -63,5 +66,14 @@ public class Program {
 
 	public int countKeywordFromDetailIntroduction(String keyword) {
 		return StringUtils.countMatches(detailIntroduction, keyword);
+	}
+
+	public List<String> acquireRegions() {
+		return address.parse();
+	}
+
+	@JsonGetter("address")
+	public String getAddress() {
+		return address.getValue();
 	}
 }

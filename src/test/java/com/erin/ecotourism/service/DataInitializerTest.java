@@ -15,7 +15,7 @@ public class DataInitializerTest {
 
 	@Test
 	public void testCsvReader() throws IOException {
-		List<String[]> list = new DataInitializer(null)
+		List<String[]> list = new DataInitializer(null, null)
 			.getSampleList();
 
 		Assert.assertEquals(110, list.size());

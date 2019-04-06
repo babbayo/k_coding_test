@@ -11,7 +11,7 @@ import org.springframework.data.repository.CrudRepository;
 public interface ProgramRepository extends CrudRepository<Program, Long> {
 
 
-	List<Program> findAllByAddressContaining(String address);
+	List<Program> findAllByAddressValueContaining(String address);
 
 	List<Program> findAllByIntroductionContaining(String keyword);
 
