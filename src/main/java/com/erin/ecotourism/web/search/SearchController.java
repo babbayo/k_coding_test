@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.erin.ecotourism.domain.Program;
 import com.erin.ecotourism.domain.ProgramRepository;
+import com.erin.ecotourism.domain.RegionRepository;
 import com.erin.ecotourism.web.search.output.CountByRegion;
 import com.erin.ecotourism.web.search.output.ProgramCountOutput;
 import com.erin.ecotourism.web.search.output.ProgramKeyOutput;
@@ -25,27 +26,31 @@ import com.erin.ecotourism.web.search.output.RegionCountOutput;
 import com.erin.ecotourism.web.search.output.RegionOutput;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @AllArgsConstructor
 @RestController
 @RequestMapping("/search")
 public class SearchController {
 
 	private ProgramRepository programRepository;
+	private RegionRepository regionRepository;
 
 	//	생태 관광지 중에 서비스 지역 컬럼에서 특정 지역에서 진행되는 프로그램명과 테마를 출력하는 API 를 개발하세요.
 	@GetMapping("/summary")
 	private RegionOutput getByRegionName(@RequestBody SearchDto condition) {
 		return Optional.of(condition)
 			.map(SearchDto::getRegion)
+			.flatMap(regionRepository::findByName)
 			.map(region -> {
-				List<ProgramSummary> programs = programRepository.findAllByAddressValueContaining(region)
-					.stream()
+
+				List<ProgramSummary> programs = region.getPrograms().stream()
 					.map(ProgramSummary::create)
 					.collect(Collectors.toList());
 
 				return RegionOutput.builder()
-					.region(region)
+					.region(region.acquireKey())
 					.programs(programs)
 					.build();
 			})
@@ -99,10 +104,10 @@ public class SearchController {
 	@GetMapping("/program")
 	private ProgramKeyOutput getProgramByKeyword(@RequestBody SearchDto condition) {
 		return Optional.of(condition)
-			.flatMap(dto -> programRepository.findAllByAddressValueContaining(dto.getRegion())
-				.stream()
+			.flatMap(dto -> regionRepository.findByNameContaining(dto.getRegion()).stream()
+				.flatMap(r -> r.getPrograms().stream())
 				.max(Comparator.comparingInt(p -> p.acquireScoreFromKeyword(dto.getKeyword())))
-				.map(p -> ProgramKeyOutput.builder().program(String.valueOf(p.getName())).build()))
+				.map(p -> ProgramKeyOutput.builder().program(p.acquireKey()).build()))
 			.orElse(ProgramKeyOutput.EMPTY);
 	}
 }

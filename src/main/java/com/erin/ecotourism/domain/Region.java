@@ -35,4 +35,8 @@ public class Region {
 	@JsonIgnore
 	@ManyToMany(mappedBy = "regions")
 	private List<Program> programs;
+
+	public String acquireKey() {
+		return "reg" + id;
+	}
 }

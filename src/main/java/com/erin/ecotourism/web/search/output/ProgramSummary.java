@@ -5,6 +5,7 @@
 package com.erin.ecotourism.web.search.output;
 
 import com.erin.ecotourism.domain.Program;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,6 +13,8 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class ProgramSummary {
+
+	@JsonProperty("prgm_name")
 	private String prgmName;
 	private String theme;
 

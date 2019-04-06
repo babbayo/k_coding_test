@@ -4,6 +4,7 @@
  */
 package com.erin.ecotourism.domain;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.repository.CrudRepository;
@@ -11,4 +12,6 @@ import org.springframework.data.repository.CrudRepository;
 public interface RegionRepository extends CrudRepository<Region, Long> {
 
 	Optional<Region> findByName(String name);
+
+	List<Region> findByNameContaining(String name);
 }

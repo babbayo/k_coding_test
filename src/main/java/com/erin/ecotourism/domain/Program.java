@@ -87,4 +87,8 @@ public class Program {
 	public String getAddress() {
 		return address.getValue();
 	}
+
+	public String acquireKey() {
+		return "prg" + id;
+	}
 }
