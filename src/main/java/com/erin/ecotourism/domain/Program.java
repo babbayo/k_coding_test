@@ -9,7 +9,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -19,6 +22,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
 @AllArgsConstructor
@@ -44,6 +48,13 @@ public class Program {
 
 	@Lob
 	private String detailIntroduction;
+
+	@Setter
+	@ManyToMany
+	@JoinTable(name = "PROGRAM_REGION",
+		joinColumns = @JoinColumn(name = "program_id"),
+		inverseJoinColumns = @JoinColumn(name = "region_id"))
+	private List<Region> regions;
 
 	public Program(String name) {
 		this.name = name;

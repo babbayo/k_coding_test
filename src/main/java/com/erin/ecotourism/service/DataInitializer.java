@@ -34,16 +34,19 @@ public class DataInitializer {
 
 	@PostConstruct
 	public void init() throws IOException {
-		List<Program> programRaw = getSampleProgramList();
+		List<Program> programRaw = getSampleProgramList()
+			.stream().peek(p -> {
 
-		List<Region> regionRaw = programRaw.stream()
-			.flatMap(p -> p.acquireRegions().stream())
-			.distinct().map(s -> new Region(null, s))
-			.collect(Collectors.toList());
+				List<Region> regions = p.acquireRegions().stream()
+					.map(s -> new Region(null, s, null))
+					.collect(Collectors.toList());
 
-		Iterable<Region> regions = regionRepository.saveAll(regionRaw);
-		log.info("{} region save (e.g. {})", regionRaw.size(), regions.iterator().next());
+				List<Region> savedRegions = regions.stream()
+					.map(r -> regionRepository.findByName(r.getName()).orElseGet(() -> regionRepository.save(r)))
+					.collect(Collectors.toList());
+				p.setRegions(savedRegions);
 
+			}).collect(Collectors.toList());
 		Iterable<Program> programs = programRepository.saveAll(programRaw);
 		log.info("{} program save (e.g. {})", programRaw.size(), programs.iterator().next());
 	}
