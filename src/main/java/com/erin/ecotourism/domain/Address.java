@@ -8,6 +8,7 @@ import static java.util.Collections.*;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -28,38 +29,45 @@ import lombok.ToString;
 @Embeddable
 public class Address {
 
+	private static final String COMMA = ",";
+
 	private String value;
 
 	public List<String> parse() {
 		return Optional.ofNullable(this.value)
 			.filter(StringUtils::isNotBlank)
-			.map(this::excludeNumber)
 			.map(this::replaceComma)
+			.map(this::excludeNumber)
+			.map(this::excludeWord)
+			.map(StringUtils::trim)
 			.map(raw -> {
-				if (raw.contains(" ")) {
-					return Arrays.stream(raw.split(" "))
-						.flatMap(s -> s.contains(",") ? Arrays.stream(s.split(",")) : Stream.of(s))
-						.map(s -> s.replaceAll("일대", ""))
-						.map(s -> s.replaceAll("일원", ""))
-						.filter(s -> !StringUtils.equalsAny(s, " ", ",", ""))
-						.filter(s -> !StringUtils.endsWithAny(s, "공원", "사무소", "산"))
-						.collect(Collectors.toList());
+				if (raw.contains(COMMA)) {
+					String[] split = raw.split(" ");
+					List<String> list = new LinkedList<>();
+					for (int i = 0; i < split.length; i++) {
+						String currWord = split[i];
+						if (currWord.contains(COMMA)) {
+							String prevWord = i == 0 ? "" : Arrays.stream(split, 0, i).collect(Collectors.joining(" "));
+							Arrays.stream(currWord.split(",")).forEach(address -> list.add(prevWord + " " + address));
+							break;
+						}
+					}
+					return list;
 				}
 				return singletonList(raw);
 			})
 			.orElse(Collections.emptyList());
 	}
 
-	private String replaceComma(String raw) {
+	String replaceComma(String raw) {
 		return Stream.of("~", "및", ",")
 			.filter(raw::contains)
 			.findFirst()
-			.map(s -> raw.replaceAll(" " + s, ",").replaceAll(s + " ", ",").replaceAll(s, ","))
+			.map(s -> raw.replaceAll("\\s" + s, s).replaceAll(s + "\\s", s).replaceAll(s, ","))
 			.orElse(raw);
-
 	}
 
-	private String excludeNumber(String raw) {
+	String excludeNumber(String raw) {
 		StringBuilder sb = new StringBuilder();
 		for (char c : raw.toCharArray()) {
 			if (Character.isDigit(c)) {
@@ -67,6 +75,23 @@ public class Address {
 			}
 			sb.append(c);
 		}
-		return sb.toString();
+		return StringUtils.trim(sb.toString());
+	}
+
+	String excludeWord(String s) {
+		if (s.contains(" ")) {
+			String[] split = s.split(" ");
+			for (int i = 0; i < split.length; i++) {
+				if (StringUtils.endsWithAny(split[i], "일대", "일원", "등")) {
+					String prevWord = i == 0 ? "" : Arrays.stream(split, 0, i).collect(Collectors.joining(" "));
+					return StringUtils.trim(prevWord + " " + split[i].replaceAll("일대|일원|등", ""));
+				}
+
+				if (StringUtils.endsWithAny(split[i], "공원", "사무소", "산")) {
+					return i == 0 ? "" : Arrays.stream(split, 0, i).collect(Collectors.joining(" "));
+				}
+			}
+		}
+		return s;
 	}
 }
