@@ -5,6 +5,7 @@
 package com.erin.ecotourism.domain;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -61,18 +62,35 @@ public class Program {
 	}
 
 	//	테마 컬럼, 프로그램 소개 컬럼, 그리고 프로그램 상세 소개 컬럼을 모두 사용하시고 가중치를 계산하는 로직이 포함되어야 합니다.
-	public int acquireScoreFromKeyword(String keyword) {
-		return countKeywordFromTheme(keyword) +
-			countKeywordFromIntroduction(keyword) +
-			countKeywordFromDetailIntroduction(keyword);
+	public double acquireScoreFromKeyword(String keyword) {
+
+		return scoreKeywordFromTheme(keyword) +
+			scoreKeywordFromIntroduction(keyword) +
+			scoreKeywordFromDetailIntroduction(keyword);
 	}
 
-	int countKeywordFromTheme(String keyword) {
-		return StringUtils.countMatches(theme, keyword);
+	double scoreKeywordFromTheme(String keyword) {
+		return Optional.ofNullable(theme)
+			.map(el -> {
+				int splitCount = (el.contains(",") ? StringUtils.countMatches(el, ",") : 0) + 1;
+				return ((double)StringUtils.countMatches(el, keyword)) / splitCount;
+			}).orElse(0.0);
 	}
 
-	int countKeywordFromIntroduction(String keyword) {
-		return StringUtils.countMatches(introduction, keyword);
+	double scoreKeywordFromIntroduction(String keyword) {
+		return Optional.ofNullable(introduction)
+			.map(el -> {
+				int splitCount = (el.contains(", ") ? StringUtils.countMatches(el, ", ") : 0) + 1;
+				return ((double)StringUtils.countMatches(el, keyword)) / splitCount;
+			}).orElse(0.0);
+	}
+
+	double scoreKeywordFromDetailIntroduction(String keyword) {
+		return Optional.ofNullable(detailIntroduction)
+			.map(el -> {
+				int splitCount = (el.contains("\n") ? StringUtils.countMatches(el, "\n") : 0) + 1;
+				return ((double)StringUtils.countMatches(el, keyword)) / splitCount;
+			}).orElse(0.0);
 	}
 
 	public int countKeywordFromDetailIntroduction(String keyword) {

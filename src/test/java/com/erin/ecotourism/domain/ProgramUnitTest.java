@@ -20,7 +20,7 @@ public class ProgramUnitTest {
 
 		int count = program.countKeywordFromDetailIntroduction("문화");
 
-		assertThat(2, is(count));
+		assertThat(count, is(2));
 	}
 
 	@Test
@@ -37,9 +37,80 @@ public class ProgramUnitTest {
 				" 자연의 향기를 제대로 느끼고 색다른 체험을 원한다면 '자연과 문화가 있는 치악산 수학여행'에 참여해 보시길 바랍니다.")
 			.build();
 
-		assertThat(2, is(program.countKeywordFromDetailIntroduction(keyword)));
-		assertThat(0, is(program.countKeywordFromIntroduction(keyword)));
-		assertThat(1, is(program.countKeywordFromTheme(keyword)));
-		assertThat(3, is(program.acquireScoreFromKeyword(keyword)));
+		assertThat(program.countKeywordFromDetailIntroduction(keyword), is(2));
+		assertThat(program.scoreKeywordFromTheme(keyword), is(1.0));
+		assertThat(program.scoreKeywordFromIntroduction(keyword), is(0.0));
+		assertThat(program.scoreKeywordFromDetailIntroduction(keyword), is(0.4));
+		assertThat(program.acquireScoreFromKeyword(keyword), is(1.4));
+	}
+
+	@Test
+	public void testDetailWeight2() {
+
+		String keyword = "국립공원";
+		Program program = Program.builder()
+			.theme("아동·청소년 체험학습")
+			.introduction("1일차: 어름치마을 인근 탐방, 2일차: 오대산국립공원 탐방, 3일차: 봉평마을 탐방")
+			.detailIntroduction("1일차: 백룡동굴, 민물고기생태관 체험, 칠족령 트레킹\n" +
+				" 2일차: 대관령 양떼목장, 신재생 에너지전시관, 오대산국립공원\n" +
+				" 3일차: 이효석 문학관, 봉평마을")
+			.build();
+
+		assertThat(program.countKeywordFromDetailIntroduction(keyword), is(1));
+		assertThat(program.scoreKeywordFromTheme(keyword), is(0.0));
+		assertThat(program.scoreKeywordFromIntroduction(keyword), is(allOf(greaterThan(0.3), lessThan(0.4))));
+		assertThat(program.scoreKeywordFromDetailIntroduction(keyword), is(allOf(greaterThan(0.3), lessThan(0.4))));
+		assertThat(program.acquireScoreFromKeyword(keyword), is(allOf(greaterThan(0.6), lessThan(1.0))));
+	}
+
+	@Test
+	public void testDetailWeight3() {
+
+		String keyword = "국립공원";
+		Program program = Program.builder()
+			.theme("자연생태")
+			.introduction("소금강, 삼산테마파크")
+			.detailIntroduction("오대산국립공원의 대표 경관인 소금강지구에서 대자연의 아름다움을 제대로 즐긴다.")
+			.build();
+
+		assertThat(program.countKeywordFromDetailIntroduction(keyword), is(1));
+		assertThat(program.scoreKeywordFromTheme(keyword), is(0.0));
+		assertThat(program.scoreKeywordFromIntroduction(keyword), is(0.0));
+		assertThat(program.scoreKeywordFromDetailIntroduction(keyword), is(1.0));
+		assertThat(program.acquireScoreFromKeyword(keyword), is(1.0));
+	}
+
+	@Test
+	public void testDetailWeight4() {
+
+		String keyword = "생태체험";
+		Program program = Program.builder()
+			.theme("건강나누리캠프")
+			.introduction("남해 편백 숲 속에서 진행되는 아토피 천식 극복캠프(남해금산, 편백휴양림, 나비생태공원)")
+			.detailIntroduction("남해 바다를 옆에 둔 울창한 편백림 속에서 숲해설가, 전문 의료진과 함께하는 자연 속 건강한 생활 체험")
+			.build();
+
+		assertThat(program.countKeywordFromDetailIntroduction(keyword), is(0));
+		assertThat(program.scoreKeywordFromTheme(keyword), is(0.0));
+		assertThat(program.scoreKeywordFromIntroduction(keyword), is(0.0));
+		assertThat(program.scoreKeywordFromDetailIntroduction(keyword), is(0.0));
+		assertThat(program.acquireScoreFromKeyword(keyword), is(0.0));
+	}
+
+	@Test
+	public void testDetailWeight5() {
+
+		String keyword = "생태체험";
+		Program program = Program.builder()
+			.theme("자연생태체험")
+			.introduction("두모마을 전통어로체험 '개매기 체험' 참여, '내가 좋아하는 청정바다 생물' 해설프로그램 진행")
+			.detailIntroduction("밀물과 썰물 자연의 원리를 이용한 전통어로체험과 국립공원 자연해설을 통해 한려해상 국립공원 청정바다를 체험합니다")
+			.build();
+
+		assertThat(program.countKeywordFromDetailIntroduction(keyword), is(0));
+		assertThat(program.scoreKeywordFromTheme(keyword), is(1.0));
+		assertThat(program.scoreKeywordFromIntroduction(keyword), is(0.0));
+		assertThat(program.scoreKeywordFromDetailIntroduction(keyword), is(0.0));
+		assertThat(program.acquireScoreFromKeyword(keyword), is(1.0));
 	}
 }

@@ -5,8 +5,11 @@
 package com.erin.ecotourism.domain;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,6 +20,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import org.apache.commons.collections.CollectionUtils;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
@@ -63,5 +67,13 @@ public class Region {
 			.map(Region::acquireFullName)
 			.map(p -> p + " " + name)
 			.orElse(name);
+	}
+
+	public List<Region> getMeAndChild() {
+		if (CollectionUtils.isEmpty(child)) {
+			return Collections.singletonList(this);
+		}
+		return Stream.concat(child.stream().flatMap(c -> c.getMeAndChild().stream()), Stream.of(this))
+			.collect(Collectors.toList());
 	}
 }
