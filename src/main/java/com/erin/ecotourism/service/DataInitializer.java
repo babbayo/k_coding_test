@@ -36,7 +36,6 @@ public class DataInitializer {
 	public void init() throws IOException {
 		List<Program> programRaw = getSampleProgramList()
 			.stream().peek(p -> {
-
 				List<Region> savedRegions = p.acquireRegions().stream()
 					.map(this::getRegionOrInsert)
 					.collect(Collectors.toList());

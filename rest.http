@@ -42,12 +42,28 @@ Content-Type: application/json
   "region": "평창군"
 }
 
+### region 으로 조회
+GET http://localhost:8080/search/summary
+Content-Type: application/json
+
+{
+  "region": "강원도"
+}
+
 ### keyword 로 region 조회
 GET http://localhost:8080/search/counting/region
 Content-Type: application/json
 
 {
   "keyword": "세계문화유산"
+}
+
+### keyword 로 region 조회
+GET http://localhost:8080/search/counting/region
+Content-Type: application/json
+
+{
+  "keyword": "남해"
 }
 
 ### keyword 로 program 조회

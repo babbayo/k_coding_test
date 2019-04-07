@@ -6,6 +6,7 @@ package com.erin.ecotourism.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -29,7 +30,7 @@ import lombok.ToString;
 @Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
+@ToString(exclude = "child")
 @Getter
 @Entity
 public class Region {
@@ -40,10 +41,12 @@ public class Region {
 	@Column(unique = true)
 	private String name;
 
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "PARENT_ID")
 	private Region parent;
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "parent")
 	private List<Region> child = new ArrayList<>();
 
@@ -55,9 +58,10 @@ public class Region {
 		return "reg" + id;
 	}
 
-	//==연관관계 메서드==//
-	public void addChildCategory(Region child) {
-		this.child.add(child);
-		child.parent = this;
+	public String acquireFullName() {
+		return Optional.ofNullable(parent)
+			.map(Region::acquireFullName)
+			.map(p -> p + " " + name)
+			.orElse(name);
 	}
 }

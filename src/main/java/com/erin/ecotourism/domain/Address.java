@@ -31,6 +31,7 @@ import lombok.ToString;
 @Embeddable
 public class Address {
 
+	private static final String SPACE = " ";
 	private static final String COMMA = ",";
 
 	private String value;
@@ -38,15 +39,17 @@ public class Address {
 	public Set<Region> parseByRegion() {
 		List<String> addressList = parse();
 		Set<Region> regions = new HashSet<>();
-		for (int i = 0; i < addressList.size(); i++) {
-			String address = addressList.get(i);
-			if (address.contains(" ")) {
-				String[] wordList = address.split(" ");
-				for (int j = 0; j < wordList.length; j++) {
-					Region prev = j == 0 ? null : Region.builder().name(wordList[j - 1]).build();
-					String curr = wordList[j];
-					regions.add(Region.builder().name(curr).parent(prev).build());
+
+		for (String address : addressList) {
+			if (address.contains(SPACE)) {
+				String[] wordList = address.split(SPACE);
+				Region prev = null;
+				Region curr = null;
+				for (String word : wordList) {
+					curr = Region.builder().name(word).parent(prev).build();
+					prev = curr;
 				}
+				regions.add(curr);
 			} else {
 				regions.add(Region.builder().name(address).build());
 			}
@@ -54,7 +57,7 @@ public class Address {
 		return regions;
 	}
 
-	public List<String> parse() {
+	List<String> parse() {
 		return Optional.ofNullable(this.value)
 			.filter(StringUtils::isNotBlank)
 			.map(this::replaceComma)
@@ -63,13 +66,15 @@ public class Address {
 			.map(StringUtils::trim)
 			.map(raw -> {
 				if (raw.contains(COMMA)) {
-					String[] split = raw.split(" ");
+					String[] split = raw.split(SPACE);
 					List<String> list = new LinkedList<>();
 					for (int i = 0; i < split.length; i++) {
 						String currWord = split[i];
 						if (currWord.contains(COMMA)) {
-							String prevWord = i == 0 ? "" : Arrays.stream(split, 0, i).collect(Collectors.joining(" "));
-							Arrays.stream(currWord.split(",")).forEach(address -> list.add(prevWord + " " + address));
+							String prevWord =
+								i == 0 ? "" : Arrays.stream(split, 0, i).collect(Collectors.joining(SPACE));
+							Arrays.stream(currWord.split(COMMA))
+								.forEach(address -> list.add(prevWord + SPACE + address));
 							break;
 						}
 					}
@@ -81,10 +86,10 @@ public class Address {
 	}
 
 	String replaceComma(String raw) {
-		return Stream.of("~", "및", ",")
+		return Stream.of("~", "및", COMMA)
 			.filter(raw::contains)
 			.findFirst()
-			.map(s -> raw.replaceAll("\\s" + s, s).replaceAll(s + "\\s", s).replaceAll(s, ","))
+			.map(s -> raw.replaceAll("\\s" + s, s).replaceAll(s + "\\s", s).replaceAll(s, COMMA))
 			.orElse(raw);
 	}
 
@@ -100,16 +105,16 @@ public class Address {
 	}
 
 	String excludeWord(String s) {
-		if (s.contains(" ")) {
-			String[] split = s.split(" ");
+		if (s.contains(SPACE)) {
+			String[] split = s.split(SPACE);
 			for (int i = 0; i < split.length; i++) {
 				if (StringUtils.endsWithAny(split[i], "일대", "일원", "등")) {
-					String prevWord = i == 0 ? "" : Arrays.stream(split, 0, i).collect(Collectors.joining(" "));
-					return StringUtils.trim(prevWord + " " + split[i].replaceAll("일대|일원|등", ""));
+					String prevWord = i == 0 ? "" : Arrays.stream(split, 0, i).collect(Collectors.joining(SPACE));
+					return StringUtils.trim(prevWord + SPACE + split[i].replaceAll("일대|일원|등", ""));
 				}
 
 				if (StringUtils.endsWithAny(split[i], "공원", "사무소", "산")) {
-					return i == 0 ? "" : Arrays.stream(split, 0, i).collect(Collectors.joining(" "));
+					return i == 0 ? "" : Arrays.stream(split, 0, i).collect(Collectors.joining(SPACE));
 				}
 			}
 		}

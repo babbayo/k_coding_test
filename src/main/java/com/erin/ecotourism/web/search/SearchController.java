@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.erin.ecotourism.domain.Program;
 import com.erin.ecotourism.domain.ProgramRepository;
+import com.erin.ecotourism.domain.Region;
 import com.erin.ecotourism.domain.RegionRepository;
 import com.erin.ecotourism.web.search.output.CountByRegion;
 import com.erin.ecotourism.web.search.output.ProgramCountOutput;
@@ -63,8 +63,10 @@ public class SearchController {
 		return Optional.of(condition)
 			.map(SearchDto::getKeyword)
 			.map(keyword -> {
-				Map<String, Long> collect = programRepository.findAllByIntroductionContaining(keyword).stream()
-					.collect(Collectors.groupingBy(Program::getAddress, Collectors.counting()));
+				Map<String, Long> collect = programRepository.findAllByIntroductionContaining(keyword)
+					.stream()
+					.flatMap(p -> p.getRegions().stream().map(Region::acquireFullName))
+					.collect(Collectors.groupingBy(p -> p, Collectors.counting()));
 
 				Set<CountByRegion> collectForRegion = collect.entrySet().stream()
 					.map(set -> new CountByRegion(set.getKey(), set.getValue()))

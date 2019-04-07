@@ -23,7 +23,7 @@ public class AddressTest {
 		Set<Region> regions = address.parseByRegion();
 		Region region1 = Region.builder().name("강원도").build();
 		Region region2 = Region.builder().name("속초").parent(region1).build();
-		assertThat(regions, is(containsInAnyOrder(region1, region2)));
+		assertThat(regions, is(containsInAnyOrder(region2)));
 	}
 
 	@Test
@@ -38,7 +38,7 @@ public class AddressTest {
 		Region region2 = Region.builder().name("속초").parent(region1).build();
 		Region region3 = Region.builder().name("양양").parent(region1).build();
 		Region region4 = Region.builder().name("고성").parent(region1).build();
-		assertThat(regions, is(containsInAnyOrder(region1, region2, region3, region4)));
+		assertThat(regions, is(containsInAnyOrder(region2, region3, region4)));
 	}
 
 	@Test
@@ -50,10 +50,10 @@ public class AddressTest {
 
 		Set<Region> regions = address.parseByRegion();
 		Region region1 = Region.builder().name("강원도").build();
-		Region region2 = Region.builder().name("원주시").parent(region1.toBuilder().parent(null).build()).build();
-		Region region3 = Region.builder().name("소초면").parent(region2.toBuilder().parent(null).build()).build();
-		Region region4 = Region.builder().name("학곡리").parent(region3.toBuilder().parent(null).build()).build();
-		assertThat(regions, is(containsInAnyOrder(region1, region2, region3, region4)));
+		Region region2 = Region.builder().name("원주시").parent(region1).build();
+		Region region3 = Region.builder().name("소초면").parent(region2).build();
+		Region region4 = Region.builder().name("학곡리").parent(region3).build();
+		assertThat(regions, is(containsInAnyOrder(region4)));
 	}
 
 	@Test
@@ -65,10 +65,10 @@ public class AddressTest {
 
 		Set<Region> regions = address.parseByRegion();
 		Region region1 = Region.builder().name("전라남도").build();
-		Region region2 = Region.builder().name("영암군").parent(region1.toBuilder().parent(null).build()).build();
-		Region region3 = Region.builder().name("영암읍").parent(region2.toBuilder().parent(null).build()).build();
-		Region region4 = Region.builder().name("천황사로").parent(region3.toBuilder().parent(null).build()).build();
-		assertThat(regions, is(containsInAnyOrder(region1, region2, region3, region4)));
+		Region region2 = Region.builder().name("영암군").parent(region1).build();
+		Region region3 = Region.builder().name("영암읍").parent(region2).build();
+		Region region4 = Region.builder().name("천황사로").parent(region3).build();
+		assertThat(regions, is(containsInAnyOrder(region4)));
 	}
 
 	@Test
@@ -81,10 +81,10 @@ public class AddressTest {
 
 		Set<Region> regions = address.parseByRegion();
 		Region region1 = Region.builder().name("전라남도").build();
-		Region region2 = Region.builder().name("신안군").parent(region1.toBuilder().parent(null).build()).build();
-		Region region3 = Region.builder().name("흑산도").parent(region2.toBuilder().parent(null).build()).build();
-		Region region4 = Region.builder().name("홍도").parent(region2.toBuilder().parent(null).build()).build();
-		assertThat(regions, is(containsInAnyOrder(region1, region2, region3, region4)));
+		Region region2 = Region.builder().name("신안군").parent(region1).build();
+		Region region3 = Region.builder().name("흑산도").parent(region2).build();
+		Region region4 = Region.builder().name("홍도").parent(region2).build();
+		assertThat(regions, is(containsInAnyOrder(region3, region4)));
 	}
 
 	@Test
@@ -97,9 +97,9 @@ public class AddressTest {
 
 		Set<Region> regions = address.parseByRegion();
 		Region region1 = Region.builder().name("경상남도").build();
-		Region region2 = Region.builder().name("산청군").parent(region1.toBuilder().parent(null).build()).build();
-		Region region3 = Region.builder().name("하동군").parent(region1.toBuilder().parent(null).build()).build();
-		assertThat(regions, is(containsInAnyOrder(region1, region2, region3)));
+		Region region2 = Region.builder().name("산청군").parent(region1).build();
+		Region region3 = Region.builder().name("하동군").parent(region1).build();
+		assertThat(regions, is(containsInAnyOrder(region2, region3)));
 	}
 
 	@Test
@@ -112,10 +112,10 @@ public class AddressTest {
 
 		Set<Region> regions = address.parseByRegion();
 		Region region1 = Region.builder().name("강원도").build();
-		Region region2 = Region.builder().name("원주시").parent(region1.toBuilder().parent(null).build()).build();
-		Region region3 = Region.builder().name("소초면").parent(region2.toBuilder().parent(null).build()).build();
-		Region region4 = Region.builder().name("무쇠점").parent(region3.toBuilder().parent(null).build()).build();
-		assertThat(regions, is(containsInAnyOrder(region1, region2, region3, region4)));
+		Region region2 = Region.builder().name("원주시").parent(region1).build();
+		Region region3 = Region.builder().name("소초면").parent(region2).build();
+		Region region4 = Region.builder().name("무쇠점").parent(region3).build();
+		assertThat(regions, is(containsInAnyOrder(region4)));
 	}
 
 	@Test
@@ -128,10 +128,10 @@ public class AddressTest {
 
 		Set<Region> regions = address.parseByRegion();
 		Region region1 = Region.builder().name("강원도").build();
-		Region region2 = Region.builder().name("원주시").parent(region1.toBuilder().parent(null).build()).build();
-		Region region3 = Region.builder().name("소초면").parent(region2.toBuilder().parent(null).build()).build();
-		Region region4 = Region.builder().name("학곡리").parent(region3.toBuilder().parent(null).build()).build();
-		assertThat(regions, is(containsInAnyOrder(region1, region2, region3, region4)));
+		Region region2 = Region.builder().name("원주시").parent(region1).build();
+		Region region3 = Region.builder().name("소초면").parent(region2).build();
+		Region region4 = Region.builder().name("학곡리").parent(region3).build();
+		assertThat(regions, is(containsInAnyOrder(region4)));
 	}
 
 	@Test
