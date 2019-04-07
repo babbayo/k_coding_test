@@ -103,7 +103,7 @@ public class Program {
 
 	@JsonGetter("address")
 	public String getAddress() {
-		return address.getValue();
+		return Optional.ofNullable(address).map(Address::getValue).orElse(null);
 	}
 
 	public String acquireKey() {

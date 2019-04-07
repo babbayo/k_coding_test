@@ -45,7 +45,8 @@ public class SearchController {
 			.flatMap(regionRepository::findByName)
 			.map(region -> {
 
-				List<ProgramSummary> programs = region.getPrograms().stream()
+				List<ProgramSummary> programs = region.acquireMeAndChild().stream()
+					.flatMap(r -> r.getPrograms().stream())
 					.map(ProgramSummary::create)
 					.collect(Collectors.toList());
 
