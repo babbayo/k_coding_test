@@ -37,18 +37,25 @@ public class DataInitializer {
 		List<Program> programRaw = getSampleProgramList()
 			.stream().peek(p -> {
 
-				List<Region> regions = p.acquireRegions().stream()
-					.map(s -> new Region(null, s, null))
-					.collect(Collectors.toList());
-
-				List<Region> savedRegions = regions.stream()
-					.map(r -> regionRepository.findByName(r.getName()).orElseGet(() -> regionRepository.save(r)))
+				List<Region> savedRegions = p.acquireRegions().stream()
+					.map(this::getRegionOrInsert)
 					.collect(Collectors.toList());
 				p.setRegions(savedRegions);
 
 			}).collect(Collectors.toList());
 		Iterable<Program> programs = programRepository.saveAll(programRaw);
 		log.info("{} program save (e.g. {})", programRaw.size(), programs.iterator().next());
+	}
+
+	private Region getRegionOrInsert(Region region) {
+		return regionRepository.findByName(region.getName()).orElseGet(() -> {
+			if (region.getParent() != null) {
+				Region parent = getRegionOrInsert(region.getParent());
+				Region build = region.toBuilder().parent(parent).build();
+				return regionRepository.save(build);
+			}
+			return regionRepository.save(region);
+		});
 	}
 
 	private List<Program> getSampleProgramList() throws IOException {

@@ -5,6 +5,7 @@
 package com.erin.ecotourism.domain;
 
 import java.util.List;
+import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,7 +16,6 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 
 import org.apache.commons.lang3.StringUtils;
-
 import com.fasterxml.jackson.annotation.JsonGetter;
 
 import lombok.AllArgsConstructor;
@@ -27,7 +27,7 @@ import lombok.ToString;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
+@ToString(exclude = "regions")
 @Getter
 @Entity
 @Builder
@@ -79,8 +79,8 @@ public class Program {
 		return StringUtils.countMatches(detailIntroduction, keyword);
 	}
 
-	public List<String> acquireRegions() {
-		return address.parse();
+	public Set<Region> acquireRegions() {
+		return address.parseByRegion();
 	}
 
 	@JsonGetter("address")

@@ -8,9 +8,11 @@ import static java.util.Collections.*;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.persistence.Embeddable;
@@ -32,6 +34,25 @@ public class Address {
 	private static final String COMMA = ",";
 
 	private String value;
+
+	public Set<Region> parseByRegion() {
+		List<String> addressList = parse();
+		Set<Region> regions = new HashSet<>();
+		for (int i = 0; i < addressList.size(); i++) {
+			String address = addressList.get(i);
+			if (address.contains(" ")) {
+				String[] wordList = address.split(" ");
+				for (int j = 0; j < wordList.length; j++) {
+					Region prev = j == 0 ? null : Region.builder().name(wordList[j - 1]).build();
+					String curr = wordList[j];
+					regions.add(Region.builder().name(curr).parent(prev).build());
+				}
+			} else {
+				regions.add(Region.builder().name(address).build());
+			}
+		}
+		return regions;
+	}
 
 	public List<String> parse() {
 		return Optional.ofNullable(this.value)
