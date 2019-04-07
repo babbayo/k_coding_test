@@ -4,7 +4,6 @@
  */
 package com.erin.ecotourism.domain;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -52,7 +51,7 @@ public class Region {
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "parent")
-	private List<Region> child = new ArrayList<>();
+	private List<Region> child;
 
 	@JsonIgnore
 	@ManyToMany(mappedBy = "regions")
