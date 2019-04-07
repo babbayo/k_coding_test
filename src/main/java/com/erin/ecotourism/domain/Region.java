@@ -69,11 +69,11 @@ public class Region {
 			.orElse(name);
 	}
 
-	public List<Region> getMeAndChild() {
+	public List<Region> acquireMeAndChild() {
 		if (CollectionUtils.isEmpty(child)) {
 			return Collections.singletonList(this);
 		}
-		return Stream.concat(child.stream().flatMap(c -> c.getMeAndChild().stream()), Stream.of(this))
+		return Stream.concat(child.stream().flatMap(c -> c.acquireMeAndChild().stream()), Stream.of(this))
 			.collect(Collectors.toList());
 	}
 }

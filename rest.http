@@ -6,7 +6,7 @@ Content-Type: application/json
   "number": 1,
   "name": "test",
   "theme": "test",
-  "address": "address1 address2, address3",
+  "address": "경기도 안양시 동안구",
   "introduction": "introduction test",
   "detailIntroduction": "hello \n test"
 }
@@ -26,7 +26,7 @@ Content-Type: application/json
   "number": 1,
   "name": "test-rename",
   "theme": "test",
-  "address": "test",
+  "address": "경기도 안양시",
   "introduction": "introduction test",
   "detailIntroduction": "hello \n test"
 }

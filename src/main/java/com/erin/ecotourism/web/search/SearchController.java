@@ -107,7 +107,7 @@ public class SearchController {
 	private ProgramKeyOutput getProgramByKeyword(@RequestBody SearchDto condition) {
 		return Optional.of(condition)
 			.flatMap(dto -> regionRepository.findByNameContaining(dto.getRegion()).stream()
-				.flatMap(r -> r.getMeAndChild().stream())
+				.flatMap(r -> r.acquireMeAndChild().stream())
 				.flatMap(r -> r.getPrograms().stream())
 				.max(Comparator.comparingDouble(p -> p.acquireScoreFromKeyword(dto.getKeyword())))
 				.map(p -> ProgramKeyOutput.builder().program(p.acquireKey()).build()))
