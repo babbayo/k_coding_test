@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.erin.ecotourism.domain.Program;
-import com.erin.ecotourism.domain.ProgramRepository;
-import com.erin.ecotourism.domain.Region;
+import com.erin.ecotourism.domain.program.Program;
+import com.erin.ecotourism.domain.program.ProgramRepository;
+import com.erin.ecotourism.domain.region.Region;
 import com.erin.ecotourism.service.RegionService;
 
 import lombok.AllArgsConstructor;

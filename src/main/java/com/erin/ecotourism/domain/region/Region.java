@@ -2,7 +2,7 @@
  * Copyright 2019 Naver Corp. All rights Reserved.
  * Naver PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
-package com.erin.ecotourism.domain;
+package com.erin.ecotourism.domain.region;
 
 import java.util.Collections;
 import java.util.List;
@@ -20,6 +20,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import org.apache.commons.collections.CollectionUtils;
+import com.erin.ecotourism.domain.program.Program;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;

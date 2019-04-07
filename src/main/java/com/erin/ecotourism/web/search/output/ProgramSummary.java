@@ -4,7 +4,7 @@
  */
 package com.erin.ecotourism.web.search.output;
 
-import com.erin.ecotourism.domain.Program;
+import com.erin.ecotourism.domain.program.Program;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;

@@ -12,6 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.erin.ecotourism.domain.program.Program;
+import com.erin.ecotourism.domain.program.ProgramRepository;
+
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

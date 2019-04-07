@@ -5,8 +5,8 @@
 package com.erin.ecotourism.service;
 
 import org.springframework.stereotype.Service;
-import com.erin.ecotourism.domain.Region;
-import com.erin.ecotourism.domain.RegionRepository;
+import com.erin.ecotourism.domain.region.Region;
+import com.erin.ecotourism.domain.region.RegionRepository;
 
 import lombok.AllArgsConstructor;
 

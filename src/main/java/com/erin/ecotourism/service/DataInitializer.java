@@ -13,10 +13,10 @@ import javax.annotation.PostConstruct;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
-import com.erin.ecotourism.domain.Address;
-import com.erin.ecotourism.domain.Program;
-import com.erin.ecotourism.domain.ProgramRepository;
-import com.erin.ecotourism.domain.Region;
+import com.erin.ecotourism.domain.program.Address;
+import com.erin.ecotourism.domain.program.Program;
+import com.erin.ecotourism.domain.program.ProgramRepository;
+import com.erin.ecotourism.domain.region.Region;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 

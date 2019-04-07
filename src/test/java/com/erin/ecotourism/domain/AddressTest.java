@@ -8,6 +8,9 @@ import java.util.Set;
 
 import org.junit.Test;
 
+import com.erin.ecotourism.domain.program.Address;
+import com.erin.ecotourism.domain.region.Region;
+
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
