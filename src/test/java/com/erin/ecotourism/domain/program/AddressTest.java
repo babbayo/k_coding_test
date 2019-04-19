@@ -1,4 +1,4 @@
-package com.erin.ecotourism.domain;
+package com.erin.ecotourism.domain.program;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.junit.Test;
-
-import com.erin.ecotourism.domain.program.Address;
 import com.erin.ecotourism.domain.region.Region;
 
 import lombok.extern.slf4j.Slf4j;
